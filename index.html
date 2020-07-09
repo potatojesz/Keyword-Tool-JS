@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<body>
+<textarea id="textarea" rows="30" cols="180">TUTAJ WPISZ CO CHCESZ DOSTAC</textarea>
+<br><br>
+<button id="submit" >GOGOGO</button>
+</body>
+<script type="text/javascript">
+    document.getElementById("submit").onclick = function () {
+       let array = document.getElementById("textarea").value.split('\n');
+	   let result = generateKeywordsString(array);
+	   document.getElementById("textarea").innerHTML = result;
+	   document.getElementById("textarea").value = result;
+    };
+	
+	function generateKeywordsString(array) {
+		let str = '';
+		let resultArr = generateKeywords(array)
+		
+		for (let index = 0; index < resultArr.length; index++) { 
+			str = str.concat(resultArr[index].trim(), '\n');
+		}
+		
+		return str.trim();
+	}
+	
+	function generateKeywords(array) {
+		let result = [];
+		for (let index = 0; index < array.length; index++) {
+			let str = array[index];
+			let splited = str.split(/(\s+)/).filter( e => e.length > 1);
+			
+			result.push(generatePlusSignReapetedPhrase(splited));
+			
+			let combinations = generateCombinations(splited);
+			for (let i = 0; i < combinations.length; i++) {
+				result.push(combinations[i]);
+			}
+		}
+		
+		return result;
+	}
+	
+	function generatePlusSignReapetedPhrase(array) {
+		let str = '';
+		for (index = 0; index < array.length; index++) {
+			str = str.concat(' +', array[index].trim());
+		}
+		
+		return str.trim();
+	}
+	
+	function generateCombinations(input) { 
+		const result = []; 
+		permute(input, 0, input.length - 1, result); 
+		return result; 
+	}
+	
+	function permute(input, startIndex, endIndex, result) { 
+		if (startIndex === endIndex) { 
+			let res = '['; 
+			input.forEach(str => res += str + ' '); 
+			result.push(res.trim() + ']'); 
+		} else { 
+			for (let i = startIndex; i <= endIndex; i++) { 
+				input = swap(input, startIndex, i); 
+				permute(input, startIndex + 1, endIndex, result); 
+				input = swap(input, startIndex, i); 
+			} 
+		} 
+	} 
+
+	function swap(str, startIndex, endIndex) { 
+		let temp = str[startIndex]; 
+		str[startIndex] = str[endIndex]; 
+		str[endIndex] = temp; 
+		const result = []; 
+		str.forEach(add => result.push(add)); 
+		return result; 
+	} 
+</script>
+</html>
